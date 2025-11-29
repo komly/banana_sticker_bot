@@ -14,12 +14,12 @@ export const config = {
 
     // Token pricing
     tokenPrices: [
-        { stars: 100, tokens: 10 },
-        { stars: 200, tokens: 25 },
-        { stars: 500, tokens: 70 },
+        { stars: 50, tokens: 1 },
+        { stars: 200, tokens: 5 },
+        { stars: 500, tokens: 15 },
     ],
 
-    defaultTokens: 1,
+    defaultTokens: 0,
     tokensPerGeneration: 1,
 
     // Sticker settings
