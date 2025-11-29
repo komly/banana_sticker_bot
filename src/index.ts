@@ -1,3 +1,4 @@
+import { run } from '@grammyjs/runner';
 import { createBot } from './bot';
 import { prisma } from './db/prisma';
 
@@ -13,30 +14,34 @@ async function main() {
         process.exit(1);
     }
 
-    // Create and start bot
+    // Create bot
     const bot = createBot();
 
+    // Initialize bot (fetch info)
+    await bot.init();
+    console.log(`✅ Bot started as @${bot.botInfo.username}`);
+    console.log('📸 Ready to create sticker packs!');
+
+    // Start runner for concurrent processing
+    const runner = run(bot);
+
     // Handle shutdown gracefully
-    process.once('SIGINT', async () => {
-        console.log('\n⏹️  Stopping bot...');
-        await bot.stop();
+    const stopRunner = async () => {
+        if (runner.isRunning()) {
+            await runner.stop();
+        }
         await prisma.$disconnect();
         process.exit(0);
+    };
+
+    process.once('SIGINT', async () => {
+        console.log('\n⏹️  Stopping bot...');
+        await stopRunner();
     });
 
     process.once('SIGTERM', async () => {
         console.log('\n⏹️  Stopping bot...');
-        await bot.stop();
-        await prisma.$disconnect();
-        process.exit(0);
-    });
-
-    // Start bot
-    await bot.start({
-        onStart: (botInfo) => {
-            console.log(`✅ Bot started as @${botInfo.username}`);
-            console.log('📸 Ready to create sticker packs!');
-        },
+        await stopRunner();
     });
 }
 

@@ -22,6 +22,7 @@
   "license": "MIT",
   "dependencies": {
     "@grammyjs/hydrate": "^1.4.1",
+    "@grammyjs/runner": "^2.0.3",
     "@prisma/client": "^5.8.1",
     "dotenv": "^16.4.1",
     "grammy": "^1.21.1",
