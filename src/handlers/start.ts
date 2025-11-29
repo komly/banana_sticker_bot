@@ -1,7 +1,8 @@
 import { Context } from 'grammy';
 import { userService } from '../db/user.service';
+import { MyContext } from '../types';
 
-export async function handleStart(ctx: Context) {
+export async function handleStart(ctx: MyContext) {
     try {
         const userId = ctx.from?.id;
         const username = ctx.from?.username;

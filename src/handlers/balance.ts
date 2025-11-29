@@ -1,8 +1,9 @@
 import { Context } from 'grammy';
 import { userService } from '../db/user.service';
 import { config } from '../config';
+import { MyContext } from '../types';
 
-export async function handleBalance(ctx: Context) {
+export async function handleBalance(ctx: MyContext) {
     try {
         const userId = ctx.from?.id;
 
@@ -43,11 +44,11 @@ export async function handleBalance(ctx: Context) {
     }
 }
 
-export async function handleBuyTokens(ctx: Context) {
+export async function handleBuyTokens(ctx: MyContext) {
     await handleBalance(ctx);
 }
 
-export async function handleBuyCallback(ctx: Context, stars: number) {
+export async function handleBuyCallback(ctx: MyContext, stars: number) {
     try {
         const userId = ctx.from?.id;
 
@@ -68,12 +69,10 @@ export async function handleBuyCallback(ctx: Context, stars: number) {
         const payload = `tokens_${priceOption.tokens}_${Date.now()}`;
         const currency = 'XTR'; // Telegram Stars currency code
 
-        await ctx.api.sendInvoice(
-            ctx.chat!.id,
+        await ctx.replyWithInvoice(
             title,
             description,
             payload,
-            '', // provider_token is empty for Stars
             currency,
             [
                 {

@@ -26,3 +26,8 @@ export interface StickerData {
     buffer: Buffer;
     emoji: string;
 }
+
+import { Context } from 'grammy';
+import { HydrateFlavor } from '@grammyjs/hydrate';
+
+export type MyContext = HydrateFlavor<Context>;

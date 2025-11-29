@@ -70,7 +70,7 @@ export class StickerGeneratorService {
                 throw new Error(`OpenRouter API error: ${response.statusText} - ${errorText}`);
             }
 
-            const result: OpenRouterResponse = await response.json();
+            const result = (await response.json()) as unknown as OpenRouterResponse;
 
             if (!result.choices || result.choices.length === 0) {
                 throw new Error('No response from AI model');

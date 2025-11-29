@@ -5,9 +5,10 @@ import { handleStart } from './handlers/start';
 import { handleBalance, handleBuyTokens, handleBuyCallback } from './handlers/balance';
 import { handlePhoto } from './handlers/photo';
 import { handlePreCheckoutQuery, handleSuccessfulPayment } from './handlers/payment';
+import { MyContext } from './types';
 
 export function createBot() {
-    const bot = new Bot(config.telegramBotToken);
+    const bot = new Bot<MyContext>(config.telegramBotToken);
 
     // Use hydration plugin
     bot.use(hydrate());

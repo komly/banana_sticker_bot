@@ -9,8 +9,9 @@ import { telegramStickerService } from '../services/telegram-stickers';
 import { replicateProcessorService } from '../services/replicate-processor';
 import fs from 'fs';
 import { config } from '../config'; // Added import for config
+import { MyContext } from '../types';
 
-export async function handlePhoto(ctx: Context) {
+export async function handlePhoto(ctx: MyContext) {
     const userId = ctx.from?.id;
     const username = ctx.from?.username; // Added username
 
