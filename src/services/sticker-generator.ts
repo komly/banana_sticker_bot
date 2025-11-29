@@ -3,6 +3,7 @@ import { encodeBufferToBase64 } from '../utils/base64';
 import { OpenRouterResponse } from '../types';
 import fs from 'fs';
 import path from 'path';
+import sharp from 'sharp';
 
 const STICKER_PROMPT = `Based on the provided image, generate a 5×5 grid (25 items) of Telegram-ready stickers.
 Each sticker must feature the same person, with recognizable facial features, proportions, and identity, but without caricature distortion.
@@ -29,7 +30,21 @@ Output Requirements:
 export class StickerGeneratorService {
     async generateStickerGrid(imageBuffer: Buffer): Promise<string> {
         try {
-            const base64Image = encodeBufferToBase64(imageBuffer, 'image/jpeg');
+            // Compress image before sending to API to save tokens
+            console.log('Compressing image to save tokens...');
+            const compressedBuffer = await sharp(imageBuffer)
+                .resize(512, 512, {
+                    fit: 'inside',  // Preserves aspect ratio
+                    withoutEnlargement: true,
+                })
+                .jpeg({ quality: 70 })
+                .toBuffer();
+            
+            const originalSize = imageBuffer.length;
+            const compressedSize = compressedBuffer.length;
+            console.log(`Image compressed: ${(originalSize / 1024).toFixed(1)}KB → ${(compressedSize / 1024).toFixed(1)}KB (${((1 - compressedSize / originalSize) * 100).toFixed(1)}% reduction)`);
+
+            const base64Image = encodeBufferToBase64(compressedBuffer, 'image/jpeg');
 
             console.log('Calling OpenRouter API...');
 
