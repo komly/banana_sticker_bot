@@ -13,28 +13,28 @@ export async function handleStart(ctx: Context) {
         // Create or get user
         const user = await userService.getOrCreateUser(userId, username);
 
-        const welcomeMessage = `🎨 *Welcome to Sticker Pack Generator!*
+        const welcomeMessage = `🎨 *Добро пожаловать в Генератор Стикерпаков!*
 
-Send me a photo and I'll create a personalized sticker pack with 25 unique stickers featuring you!
+Пришли мне свою фотографию, и я создам персональный стикерпак из 25 уникальных стикеров с твоим лицом!
 
-*How it works:*
-1️⃣ Send me your photo
-2️⃣ AI generates 25 cute stickers with different emotions
-3️⃣ Get your custom sticker pack!
+*Как это работает:*
+1️⃣ Пришли мне фото
+2️⃣ ИИ сгенерирует 25 милых стикеров с разными эмоциями
+3️⃣ Получи свой готовый стикерпак!
 
-*Token System:*
-🪙 You have *${user.tokens} token${user.tokens !== 1 ? 's' : ''}*
-1 generation = 1 token
+*Система токенов:*
+🪙 У тебя есть *${user.tokens} токен${user.tokens !== 1 ? 'ов' : ''}*
+1 генерация = 1 токен
 
-Need more tokens? Use /balance to buy more! 💫`;
+Нужно больше токенов? Используй /balance чтобы купить еще! 💫`;
 
         await ctx.reply(welcomeMessage, {
             parse_mode: 'Markdown',
             reply_markup: {
                 inline_keyboard: [
                     [
-                        { text: '💰 Check Balance', callback_data: 'balance' },
-                        { text: '🛒 Buy Tokens', callback_data: 'buy_tokens' },
+                        { text: '💰 Проверить баланс', callback_data: 'balance' },
+                        { text: '🛒 Купить токены', callback_data: 'buy_tokens' },
                     ],
                 ],
             },

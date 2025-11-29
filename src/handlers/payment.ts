@@ -38,17 +38,17 @@ export async function handleSuccessfulPayment(ctx: Context) {
         const newBalance = await userService.getUserTokens(userId);
 
         await ctx.reply(
-            `✅ *Payment Successful!*
+            `✅ *Оплата прошла успешно!*
 
-You received *${tokenAmount} tokens*!
+Вы получили *${tokenAmount} токенов*!
 
-💰 New balance: *${newBalance} tokens*
+💰 Новый баланс: *${newBalance} токенов*
 
-Ready to create amazing sticker packs! 🎨`,
+Готовы создавать потрясающие стикерпаки! 🎨`,
             { parse_mode: 'Markdown' }
         );
     } catch (error) {
         console.error('Error handling successful payment:', error);
-        await ctx.reply('Payment received but there was an error. Please contact support.');
+        await ctx.reply('Оплата получена, но произошла ошибка. Пожалуйста, обратитесь в поддержку.');
     }
 }

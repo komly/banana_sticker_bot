@@ -28,11 +28,11 @@ export async function handlePhoto(ctx: Context) {
 
             if (tokens < 1) {
                 await ctx.reply(
-                    '❌ You don\'t have enough tokens!\n\nUse /balance to buy more tokens.',
+                    '❌ У вас недостаточно токенов!\n\nИспользуйте /balance чтобы купить больше токенов.',
                     {
                         reply_markup: {
                             inline_keyboard: [
-                                [{ text: '🛒 Buy Tokens', callback_data: 'buy_tokens' }],
+                                [{ text: '🛒 Купить токены', callback_data: 'buy_tokens' }],
                             ],
                         },
                     }
@@ -43,7 +43,7 @@ export async function handlePhoto(ctx: Context) {
 
         // Send processing message
         const processingMsg = await ctx.reply(
-            '⏳ Processing your photo...\n\n1️⃣ Downloading image...'
+            '⏳ Обрабатываю ваше фото...\n\n1️⃣ Скачиваю изображение...'
         );
 
         // Get the largest photo
@@ -53,7 +53,7 @@ export async function handlePhoto(ctx: Context) {
             await ctx.api.editMessageText(
                 ctx.chat!.id,
                 processingMsg.message_id,
-                '❌ No photo found. Please send a valid image.'
+                '❌ Фото не найдено. Пожалуйста, отправьте корректное изображение.'
             );
             return;
         }
@@ -68,7 +68,7 @@ export async function handlePhoto(ctx: Context) {
         await ctx.api.editMessageText(
             ctx.chat!.id,
             processingMsg.message_id,
-            '⏳ Processing your photo...\n\n1️⃣ ✅ Image downloaded\n2️⃣ Generating sticker grid with AI...\n\n⚠️ This may take 30-60 seconds'
+            '⏳ Обрабатываю ваше фото...\n\n1️⃣ ✅ Изображение скачано\n2️⃣ Генерирую сетку стикеров с помощью ИИ...\n\n⚠️ Это может занять 30-60 секунд'
         );
 
         // Generate sticker grid
@@ -79,7 +79,7 @@ export async function handlePhoto(ctx: Context) {
         await ctx.api.editMessageText(
             ctx.chat!.id,
             processingMsg.message_id,
-            '⏳ Processing your photo...\n\n1️⃣ ✅ Image downloaded\n2️⃣ ✅ AI grid generated\n3️⃣ Enhancing quality (removing background + upscaling)...\n\n⚠️ This may take 30-60 seconds'
+            '⏳ Обрабатываю ваше фото...\n\n1️⃣ ✅ Изображение скачано\n2️⃣ ✅ ИИ сетка сгенерирована\n3️⃣ Улучшаю качество (удаление фона + апскейл)...\n\n⚠️ Это может занять 30-60 секунд'
         );
 
         // Process entire grid (remove background + upscale) - much cheaper than processing 25 stickers separately!
@@ -98,7 +98,7 @@ export async function handlePhoto(ctx: Context) {
         await ctx.api.editMessageText(
             ctx.chat!.id,
             processingMsg.message_id,
-            '⏳ Processing your photo...\n\n1️⃣ ✅ Image downloaded\n2️⃣ ✅ AI grid generated\n3️⃣ ✅ Quality enhanced\n4️⃣ Cutting into 25 stickers...'
+            '⏳ Обрабатываю ваше фото...\n\n1️⃣ ✅ Изображение скачано\n2️⃣ ✅ ИИ сетка сгенерирована\n3️⃣ ✅ Качество улучшено\n4️⃣ Нарезаю на 25 стикеров...'
         );
 
         // Cut grid into 25 stickers
@@ -108,14 +108,14 @@ export async function handlePhoto(ctx: Context) {
         await ctx.api.editMessageText(
             ctx.chat!.id,
             processingMsg.message_id,
-            '⏳ Processing your photo...\n\n1️⃣ ✅ Image downloaded\n2️⃣ ✅ AI grid generated\n3️⃣ ✅ 25 stickers created\n4️⃣ Uploading to Telegram...\n\n⚠️ This may take 30-60 seconds'
+            '⏳ Обрабатываю ваше фото...\n\n1️⃣ ✅ Изображение скачано\n2️⃣ ✅ ИИ сетка сгенерирована\n3️⃣ ✅ Качество улучшено\n4️⃣ ✅ 25 стикеров создано\n5️⃣ Загружаю в Telegram...\n\n⚠️ Это может занять 30-60 секунд'
         );
 
         // Create sticker pack
         // Get bot info to get username for sticker set name
         const botInfo = await ctx.api.getMe();
         const stickerSetName = telegramStickerService.generateStickerSetName(userId, botInfo.username);
-        const stickerSetTitle = `My Stickers ${Date.now()}`;
+        const stickerSetTitle = `Мои Стикеры ${Date.now()}`;
 
         const stickerPackUrl = await telegramStickerService.createStickerSet(
             ctx.api,
@@ -137,21 +137,21 @@ export async function handlePhoto(ctx: Context) {
         await ctx.api.editMessageText(
             ctx.chat!.id,
             processingMsg.message_id,
-            `✅ *Your sticker pack is ready!*
+            `✅ *Твой стикерпак готов!*
 
-🎉 [Click here to add stickers](${stickerPackUrl})
+🎉 [Нажми сюда, чтобы добавить стикеры](${stickerPackUrl})
 
-🪙 Remaining tokens: ${remainingTokens}`,
+🪙 Осталось токенов: ${remainingTokens}`,
             {
                 parse_mode: 'Markdown',
                 link_preview_options: { is_disabled: true },
                 reply_markup: {
                     inline_keyboard: [
                         [
-                            { text: '✨ Add Sticker Pack', url: stickerPackUrl },
+                            { text: '✨ Добавить стикерпак', url: stickerPackUrl },
                         ],
                         (!isWhitelisted && remainingTokens === 0)
-                            ? [{ text: '🛒 Buy More Tokens', callback_data: 'buy_tokens' }]
+                            ? [{ text: '🛒 Купить больше токенов', callback_data: 'buy_tokens' }]
                             : [],
                     ].filter((row) => row.length > 0),
                 },
@@ -167,7 +167,7 @@ export async function handlePhoto(ctx: Context) {
         const errorMessage = error instanceof Error ? error.message : 'Unknown error';
 
         await ctx.reply(
-            `❌ *Error generating sticker pack*\n\n${errorMessage}\n\nPlease try again or contact support.`,
+            `❌ *Ошибка генерации стикерпака*\n\n${errorMessage}\n\nПожалуйста, попробуйте снова или обратитесь в поддержку.`,
             { parse_mode: 'Markdown' }
         );
     }
