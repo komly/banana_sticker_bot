@@ -14,9 +14,10 @@ export const config = {
 
     // Token pricing
     tokenPrices: [
-        { stars: 50, tokens: 1 },
-        { stars: 200, tokens: 5 },
-        { stars: 500, tokens: 15 },
+        { stars: 25, tokens: 1 },
+        { stars: 50, tokens: 2 },
+        { stars: 100, tokens: 4 },
+        { stars: 200, tokens: 9 },
     ],
 
     defaultTokens: 0,
